@@ -26,10 +26,10 @@ private val CUSTOM_SHADER = """
     layout(color) uniform half4 secondaryColor;
     
     half4 main(in float2 fragCoord){
-        float2 uv = fragCoord / resolution;
+        float2 uv = fragCoord / resolution.xy;
         
         float mixValue = distance(uv, point);
-        return mix(primaryColor, secondaryColor, mixValue)
+        return mix(primaryColor, secondaryColor, mixValue);
     }
 """.trimIndent()
 
