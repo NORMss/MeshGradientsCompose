@@ -16,75 +16,101 @@ data class Point(
 )
 
 @Language("AGSL")
-private val CUSTOM_SHADER = """
-    uniform float time;
-    uniform float2 resolution;
+private val CUSTOM_SHADER = """uniform float time;
+uniform float2 resolution;
 
-    uniform int pointCount;
+uniform int pointCount;
 
-    uniform float2 points_0;
-    uniform float2 points_1;
-    uniform float2 points_2;
-    uniform float2 points_3;
-    uniform float2 points_4;
-    uniform float2 points_5;
-    uniform float2 points_6;
-    uniform float2 points_7;
-    uniform float2 points_8;
-    uniform float2 points_9;
+uniform float2 points_0;
+uniform float2 points_1;
+uniform float2 points_2;
+uniform float2 points_3;
+uniform float2 points_4;
+uniform float2 points_5;
+uniform float2 points_6;
+uniform float2 points_7;
+uniform float2 points_8;
+uniform float2 points_9;
 
-    layout(color) uniform half4 colors_0;
-    layout(color) uniform half4 colors_1;
-    layout(color) uniform half4 colors_2;
-    layout(color) uniform half4 colors_3;
-    layout(color) uniform half4 colors_4;
-    layout(color) uniform half4 colors_5;
-    layout(color) uniform half4 colors_6;
-    layout(color) uniform half4 colors_7;
-    layout(color) uniform half4 colors_8;
-    layout(color) uniform half4 colors_9;
+layout(color) uniform half4 colors_0;
+layout(color) uniform half4 colors_1;
+layout(color) uniform half4 colors_2;
+layout(color) uniform half4 colors_3;
+layout(color) uniform half4 colors_4;
+layout(color) uniform half4 colors_5;
+layout(color) uniform half4 colors_6;
+layout(color) uniform half4 colors_7;
+layout(color) uniform half4 colors_8;
+layout(color) uniform half4 colors_9;
 
-    half4 getColor(int i) {
-        if (i == 0) return colors_0;
-        if (i == 1) return colors_1;
-        if (i == 2) return colors_2;
-        if (i == 3) return colors_3;
-        if (i == 4) return colors_4;
-        if (i == 5) return colors_5;
-        if (i == 6) return colors_6;
-        if (i == 7) return colors_7;
-        if (i == 8) return colors_8;
-        return colors_9;
+half4 main(in float2 fragCoord){
+    float2 uv = fragCoord / resolution.xy;
+    half4 color = half4(0.0);
+    float totalWeight = 0.0;
+
+    if (pointCount > 0) {
+        float d = distance(uv, points_0);
+        float w = 1.0 / (d + 0.001);
+        color += colors_0 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 1) {
+        float d = distance(uv, points_1);
+        float w = 1.0 / (d + 0.001);
+        color += colors_1 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 2) {
+        float d = distance(uv, points_2);
+        float w = 1.0 / (d + 0.001);
+        color += colors_2 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 3) {
+        float d = distance(uv, points_3);
+        float w = 1.0 / (d + 0.001);
+        color += colors_3 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 4) {
+        float d = distance(uv, points_4);
+        float w = 1.0 / (d + 0.001);
+        color += colors_4 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 5) {
+        float d = distance(uv, points_5);
+        float w = 1.0 / (d + 0.001);
+        color += colors_5 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 6) {
+        float d = distance(uv, points_6);
+        float w = 1.0 / (d + 0.001);
+        color += colors_6 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 7) {
+        float d = distance(uv, points_7);
+        float w = 1.0 / (d + 0.001);
+        color += colors_7 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 8) {
+        float d = distance(uv, points_8);
+        float w = 1.0 / (d + 0.001);
+        color += colors_8 * w;
+        totalWeight += w;
+    }
+    if (pointCount > 9) {
+        float d = distance(uv, points_9);
+        float w = 1.0 / (d + 0.001);
+        color += colors_9 * w;
+        totalWeight += w;
     }
 
-    float2 getPoint(int i) {
-        if (i == 0) return points_0;
-        if (i == 1) return points_1;
-        if (i == 2) return points_2;
-        if (i == 3) return points_3;
-        if (i == 4) return points_4;
-        if (i == 5) return points_5;
-        if (i == 6) return points_6;
-        if (i == 7) return points_7;
-        if (i == 8) return points_8;
-        return points_9;
-    }
-
-    half4 main(in float2 fragCoord){
-        float2 uv = fragCoord / resolution.xy;
-        half4 color = half4(0.0);
-        float totalWeight = 0.0;
-
-        for (int i = 0; i < pointCount; i++) {
-            float2 point = getPoint(i);
-            float dist = distance(uv, point);
-            float weight = 1.0 / (dist + 0.001);
-            color += getColor(i) * weight;
-            totalWeight += weight;
-        }
-
-        return color / totalWeight;
-    }
+    return color / totalWeight;
+}
 """.trimIndent()
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

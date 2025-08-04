@@ -1,12 +1,15 @@
 package ru.normno.mymeshgradientscompose
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -19,11 +22,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,10 +36,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.normno.mymeshgradientscompose.ui.theme.MyMeshGradientsComposeTheme
-import kotlin.collections.mutableListOf
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -175,6 +180,7 @@ fun GradientBoxWithAnimationFire(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview
 @Composable
 fun GradientBoxWithAnimationMultiplayPoint(
@@ -191,9 +197,9 @@ fun GradientBoxWithAnimationMultiplayPoint(
     )
 
     val points = remember(time) {
-        List(5) { index ->
+        List(10) { index ->
             val angle = time + index
-            val radius = 0.3f
+            val radius = 0.5f
             val x = 0.5f + radius * cos(angle + index)
             val y = 0.5f + radius * sin(angle + index)
             Point(
@@ -216,18 +222,8 @@ fun GradientBoxWithAnimationMultiplayPoint(
                 )
             )
             .animatedMultiplayPointMashGradient(
-                primaryColor = MaterialTheme.colorScheme.primary,
-                secondaryColor = MaterialTheme.colorScheme.secondary,
-                points = listOf(
-                    Point(
-                        color = Color.Yellow,
-                        offset = Offset(
-                            x = animatedX.value,
-                            y = animatedY.value,
-                        )
-                    )
-                ),
-                time = time.value,
+                points = points,
+                time = time,
             ),
         contentAlignment = Alignment.Center,
     ) {
