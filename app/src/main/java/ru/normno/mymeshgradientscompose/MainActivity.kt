@@ -6,6 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -177,31 +180,29 @@ fun GradientBoxWithAnimationFire(
 fun GradientBoxWithAnimationMultiplayPoint(
     modifier: Modifier = Modifier,
 ) {
-    val points = remember {
-        mutableListOf<Point>()
-    }
+    val infiniteTransition = rememberInfiniteTransition()
+    val time by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 10000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
 
-    val animatedX = remember { Animatable(0f) }
-    val animatedY = remember { Animatable(1f) }
-
-    val time = remember { Animatable(0f) }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            time.animateTo(
-                targetValue = time.value + 1f,
-                animationSpec = tween(durationMillis = 1024, easing = LinearEasing)
-            )
-            animatedX.animateTo(
-                targetValue = Random.nextFloat(),
-                animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
-            )
-            animatedY.animateTo(
-                targetValue = Random.nextFloat(),
-                animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
+    val points = remember(time) {
+        List(5) { index ->
+            val angle = time + index
+            val radius = 0.3f
+            val x = 0.5f + radius * cos(angle + index)
+            val y = 0.5f + radius * sin(angle + index)
+            Point(
+                color = Color.hsv((angle * 40 + index * 60) % 360, 1f, 1f),
+                offset = Offset(x, y)
             )
         }
     }
+
 
     Box(
         modifier = modifier
