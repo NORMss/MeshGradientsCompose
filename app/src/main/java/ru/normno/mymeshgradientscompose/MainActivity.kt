@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        GradientBoxWithAnimationMultiplayPoint()
+                        GradientBoxWithBilinearMashGradient()
                     }
                 }
             }
@@ -224,6 +224,36 @@ fun GradientBoxWithAnimationMultiplayPoint(
             .animatedMultiplayPointMashGradient(
                 points = points,
                 time = time,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "Test Animated Gradient",
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Preview
+@Composable
+fun GradientBoxWithBilinearMashGradient(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth(
+                0.6f,
+            )
+            .aspectRatio(1f)
+            .clip(
+                RoundedCornerShape(
+                    16.dp,
+                )
+            )
+            .bilinearMashGradient(
+                firstColor = Color.Cyan,
+                secondColor = Color.DarkGray,
+                point = Offset(0.5f, 0.5f),
             ),
         contentAlignment = Alignment.Center,
     ) {

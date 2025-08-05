@@ -9,7 +9,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
 import org.intellij.lang.annotations.Language
-import java.nio.file.Files.size
 
 @Language("AGSL")
 private val CUSTOM_SHADER = """
@@ -32,7 +31,7 @@ private val CUSTOM_SHADER = """
 """.trimIndent()
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun Modifier.animateBilinearMashGradient(
+fun Modifier.bilinearMashGradient(
     firstColor: Color,
     secondColor: Color,
     point: Offset,
