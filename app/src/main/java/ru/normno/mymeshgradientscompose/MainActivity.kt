@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +37,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import ru.normno.mymeshgradientscompose.ui.theme.MyMeshGradientsComposeTheme
 import kotlin.math.cos
 import kotlin.math.sin
@@ -253,7 +256,48 @@ fun GradientBoxWithBilinearMashGradient(
             .bilinearMashGradient(
                 firstColor = Color.Cyan,
                 secondColor = Color.DarkGray,
+                point = Offset(0.2f, 0.2f),
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "Test Animated Gradient",
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Preview
+@Composable
+fun GradientBoxAnimatedSpiralMashGradient(
+    modifier: Modifier = Modifier,
+) {
+    var time by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            time += 0.01f
+            if (time > 1000f) time = 0f
+            delay(16L)
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth(
+                0.6f,
+            )
+            .aspectRatio(1f)
+            .clip(
+                RoundedCornerShape(
+                    16.dp,
+                )
+            )
+            .animatedSpiralMashGradient(
+                firstColor = Color.Cyan,
+                secondColor = Color.Blue,
                 point = Offset(0.5f, 0.5f),
+                time = time,
             ),
         contentAlignment = Alignment.Center,
     ) {
