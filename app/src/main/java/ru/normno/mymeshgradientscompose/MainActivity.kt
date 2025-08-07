@@ -306,3 +306,43 @@ fun GradientBoxAnimatedSpiralMashGradient(
         )
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Preview
+@Composable
+fun GradientBoxAngularMashGradient(
+    modifier: Modifier = Modifier,
+) {
+    var time by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            time += 0.01f
+            if (time > 1000f) time = 0f
+            delay(16L)
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth(
+                0.6f,
+            )
+            .aspectRatio(1f)
+            .clip(
+                RoundedCornerShape(
+                    16.dp,
+                )
+            )
+            .angularMashGradient(
+                firstColor = Color.Magenta,
+                secondColor = Color.Cyan,
+                point = Offset(0.5f, 0.5f)
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "Test Animated Gradient",
+        )
+    }
+}
