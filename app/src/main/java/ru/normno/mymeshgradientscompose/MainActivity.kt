@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        GradientBoxWithBilinearMashGradient()
+                        GradientBoxLightBall()
                     }
                 }
             }
@@ -344,5 +344,29 @@ fun GradientBoxAngularMashGradient(
         Text(
             text = "Test Animated Gradient",
         )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Preview
+@Composable
+fun GradientBoxLightBall(
+    modifier: Modifier = Modifier,
+) {
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth(
+                0.6f,
+            )
+            .aspectRatio(1f)
+            .clip(
+                RoundedCornerShape(
+                    16.dp,
+                )
+            )
+            .lightBall(),
+        contentAlignment = Alignment.Center,
+    ) {
     }
 }
