@@ -19,43 +19,35 @@ import org.intellij.lang.annotations.Language
 @Language("AGSL")
 private val lightBallShader = """
     uniform float2 size;       // The size of the canvas in pixels (width, height)
-    uniform float time;        // The elapsed time for animating the light effect
-    uniform shader composable; // Shader for the composable content
+    uniform float time;        // Animation time
+    uniform shader composable; // Composable content
     
     half4 main(float2 fragCoord) {
-        // Initialize output color
         float4 o = float4(0.0);
         
-        // Normalize coordinates relative to the canvas center
-        float2 u = fragCoord.xy * 2.0 - size.xy;
+        float2 u = fragCoord - size * 0.5;
         float2 s = u / size.y;
 
-        // Loop to calculate the light ball effect
         for (float i = 0.0; i < 180.0; i++) {
-            float a = i / 90.0 - 1.0;                       // Calculate a normalized angle
-            float sqrtTerm = sqrt(1.0 - a * a);            // Circular boundary constraint
-            float2 p = cos(i * 2.4 + time + float2(0.0, 11.0)) * sqrtTerm; // Oscillation term
+            float a = i / 90.0 - 1.0;
+            float sqrtTerm = sqrt(1.0 - a * a);
+            float2 p = cos(i * 2.4 + time + float2(0.0, 11.0)) * sqrtTerm;
             
-            // Compute position and adjust with distortion
             float2 c = s + float2(p.x, a) / (p.y + 2.0);
-            
-            // Calculate the distance factor (denominator)
             float denom = dot(c, c);
             
-            // Add light intensity with color variation
             float4 cosTerm = cos(i + float4(0.0, 2.0, 4.0, 0.0)) + 1.0;
-            o += cosTerm / denom * (1.0 - p.y) / 30000.0;
+            o += cosTerm / denom * (1.0 - p.y) / 300.0; // Ярче
         }
 
-        // Return final color with an alpha of 1.0
-        return half4(o.rgb, 1.0);
+        // Overlay composable content
+        float4 baseColor = composable.eval(fragCoord);
+        return half4(o.rgb + baseColor.rgb, 1.0);
     }
 """.trimIndent()
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun Modifier.lightBall(
-
-) = composed {
+fun Modifier.lightBall(): Modifier = composed {
     val shader = remember { RuntimeShader(lightBallShader) }
     var time by remember { mutableFloatStateOf(0f) }
 
@@ -66,8 +58,8 @@ fun Modifier.lightBall(
         }
     }
 
-    this.graphicsLayer {
-        shader.setFloatUniform("resolution", size.width, size.height)
+    graphicsLayer {
+        shader.setFloatUniform("size", size.width, size.height)
         shader.setFloatUniform("time", time)
 
         renderEffect = RenderEffect
