@@ -46,7 +46,6 @@ private val lightBallShader = """
     }
 """.trimIndent()
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun Modifier.lightBall(): Modifier = composed {
     val shader = remember { RuntimeShader(lightBallShader) }
     var time by remember { mutableFloatStateOf(0f) }

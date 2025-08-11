@@ -45,7 +45,6 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -348,7 +347,6 @@ fun GradientBoxAngularMashGradient(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview
 @Composable
 fun GradientBoxLightBall(
@@ -363,3 +361,12 @@ fun GradientBoxLightBall(
         contentAlignment = Alignment.Center
     ) { }
 }
+
+@Preview
+@Composable
+fun BoxFractal(
+    modifier: Modifier = Modifier,
+) {
+    FractalShader()
+}
+
